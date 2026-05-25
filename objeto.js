@@ -90,22 +90,8 @@ function tornarArrastavel(el) {
   let offsetX = 0;
   let offsetY = 0;
 
-  el.addEventListener(
-    "mousedown",
-    iniciarMouse
-  );
-
-  document.addEventListener(
-    "mousemove",
-    moverMouse
-  );
-
-  document.addEventListener(
-    "mouseup",
-    pararDrag
-  );
-
-  function iniciarMouse(e) {
+  // DESKTOP
+  el.addEventListener("mousedown", (e) => {
 
     dragging = true;
 
@@ -117,70 +103,71 @@ function tornarArrastavel(el) {
 
     offsetY =
       e.clientY - rect.top;
-  }
+  });
 
-  function moverMouse(e) {
+  document.addEventListener("mousemove", (e) => {
 
     if (!dragging) return;
 
-    moverElemento(
+    mover(
       e.clientX,
       e.clientY
     );
-  }
+  });
 
+  document.addEventListener("mouseup", () => {
+
+    dragging = false;
+  });
+
+  // MOBILE
   el.addEventListener(
     "touchstart",
-    iniciarTouch,
-    { passive: false }
+    (e) => {
+
+      dragging = true;
+
+      const touch =
+        e.touches[0];
+
+      const rect =
+        el.getBoundingClientRect();
+
+      offsetX =
+        touch.clientX - rect.left;
+
+      offsetY =
+        touch.clientY - rect.top;
+    },
+    { passive: true }
   );
 
   document.addEventListener(
     "touchmove",
-    moverTouch,
-    { passive: false }
+    (e) => {
+
+      if (!dragging) return;
+
+      const touch =
+        e.touches[0];
+
+      mover(
+        touch.clientX,
+        touch.clientY
+      );
+    },
+    { passive: true }
   );
 
   document.addEventListener(
     "touchend",
-    pararDrag
+    () => {
+
+      dragging = false;
+    }
   );
 
-  function iniciarTouch(e) {
-
-    dragging = true;
-
-    const touch =
-      e.touches[0];
-
-    const rect =
-      el.getBoundingClientRect();
-
-    offsetX =
-      touch.clientX - rect.left;
-
-    offsetY =
-      touch.clientY - rect.top;
-
-    e.preventDefault();
-  }
-
-  function moverTouch(e) {
-
-    if (!dragging) return;
-
-    const touch =
-      e.touches[0];
-
-    moverElemento(
-      touch.clientX,
-      touch.clientY
-    );
-
-    e.preventDefault();
-  }
-
-  function moverElemento(x, y) {
+  function mover(x, y) {
 
     el.style.left =
       (x - offsetX) + "px";
@@ -189,12 +176,8 @@ function tornarArrastavel(el) {
       (y - offsetY) + "px";
 
     el.style.right = "auto";
+
     el.style.bottom = "auto";
-  }
-
-  function pararDrag() {
-
-    dragging = false;
   }
 }
 
@@ -241,7 +224,9 @@ const btnMais =
 const btnMenos =
   document.getElementById("menosX");
 
-// começa escondido
+// =========================
+// ESCONDER APROXIMAÇÃO
+// =========================
 aproxBox.removeAttribute("open");
 
 // =========================
@@ -252,7 +237,10 @@ btnMais.onclick = () => {
   let v =
     parseFloat(input.value);
 
-  if (!isFinite(v)) v = 0;
+  if (!isFinite(v)) {
+
+    v = 0;
+  }
 
   v++;
 
@@ -266,7 +254,10 @@ btnMenos.onclick = () => {
   let v =
     parseFloat(input.value);
 
-  if (!isFinite(v)) v = 0;
+  if (!isFinite(v)) {
+
+    v = 0;
+  }
 
   v--;
 
@@ -322,7 +313,7 @@ function atualizarTudo() {
 }
 
 // =========================
-// PONTO
+// PONTO AMARELO
 // =========================
 function atualizarPonto(a) {
 
@@ -394,56 +385,6 @@ function f(x) {
 }
 
 // =========================
-// TABELA
-// =========================
-function atualizarTabela(a) {
-
-  const esquerda =
-    document.getElementById(
-      "tabelaEsquerda"
-    );
-
-  const direita =
-    document.getElementById(
-      "tabelaDireita"
-    );
-
-  esquerda.innerHTML = "";
-  direita.innerHTML = "";
-
-  if (
-    a === Infinity ||
-    a === -Infinity
-  ) {
-
-    return;
-  }
-
-  const passos = [
-    0.1,
-    0.01
-  ];
-
-  passos.forEach((p) => {
-
-    const xe = a - p;
-    const xd = a + p;
-
-    adicionarLinha(
-      esquerda,
-      xe,
-      f(xe)
-    );
-
-    adicionarLinha(
-      direita,
-      xd,
-      f(xd)
-    );
-  });
-}
-
-// =========================
 // LINHAS
 // =========================
 function adicionarLinha(
@@ -461,7 +402,150 @@ function adicionarLinha(
       <td>${format(y)}</td>
 
     </tr>
+
   `;
+}
+
+// =========================
+// CRIAR PONTOS VISUAIS
+// =========================
+function criarPonto(
+  x,
+  y,
+  nome,
+  r,
+  g,
+  b
+) {
+
+  if (!ggb) return;
+
+  try {
+
+    ggb.deleteObject(nome);
+
+  } catch {}
+
+  if (
+    !isFinite(x) ||
+    !isFinite(y)
+  ) {
+
+    return;
+  }
+
+  ggb.evalCommand(
+    `${nome}=(${x},${y})`
+  );
+
+  ggb.setColor(
+    nome,
+    r,
+    g,
+    b
+  );
+
+  ggb.setPointSize(
+    nome,
+    5
+  );
+
+  ggb.setFixed(
+    nome,
+    true,
+    false
+  );
+}
+
+// =========================
+// TABELA
+// =========================
+function atualizarTabela(a) {
+
+  const esquerda =
+    document.getElementById(
+      "tabelaEsquerda"
+    );
+
+  const direita =
+    document.getElementById(
+      "tabelaDireita"
+    );
+
+  esquerda.innerHTML = "";
+  direita.innerHTML = "";
+
+  // limpa pontos
+  for (let i = 0; i < 5; i++) {
+
+    try {
+
+      ggb.deleteObject(
+        `P_E_${i}`
+      );
+
+    } catch {}
+
+    try {
+
+      ggb.deleteObject(
+        `P_D_${i}`
+      );
+
+    } catch {}
+  }
+
+  if (
+    a === Infinity ||
+    a === -Infinity
+  ) {
+
+    return;
+  }
+
+  const passos = [
+    0.1,
+    0.01
+  ];
+
+  passos.forEach((p, i) => {
+
+    const xe = a - p;
+    const xd = a + p;
+
+    const ye = f(xe);
+    const yd = f(xd);
+
+    adicionarLinha(
+      esquerda,
+      xe,
+      ye
+    );
+
+    adicionarLinha(
+      direita,
+      xd,
+      yd
+    );
+
+    criarPonto(
+      xe,
+      ye,
+      `P_E_${i}`,
+      0,
+      120,
+      255
+    );
+
+    criarPonto(
+      xd,
+      yd,
+      `P_D_${i}`,
+      255,
+      0,
+      0
+    );
+  });
 }
 
 // =========================
@@ -526,7 +610,6 @@ btnLimite.onclick = () => {
       resp.replace(",", ".")
     );
 
-  // MOSTRA APROXIMAÇÃO
   aproxBox.setAttribute(
     "open",
     true
@@ -586,7 +669,9 @@ btnContinuidade.onclick = () => {
 
   if (!isFinite(a)) {
 
-    alert("Valor inválido");
+    alert(
+      "Valor inválido"
+    );
 
     return;
   }
@@ -597,65 +682,182 @@ btnContinuidade.onclick = () => {
   const imagem =
     f(a);
 
-  const existeImagem =
+  // =========================
+  // 1° IMAGEM
+  // =========================
+  let respostaImagem =
+    prompt(
+
+      "1° A imagem existe no ponto?\n\n" +
+
+      "Digite o valor da imagem."
+    );
+
+  if (
+    respostaImagem === null
+  ) return;
+
+  respostaImagem =
+    parseFloat(
+      respostaImagem
+      .replace(",", ".")
+    );
+
+  const imagemExiste =
     isFinite(imagem);
 
-  const existeLimite =
-    lim.existe;
+  if (!imagemExiste) {
 
-  const iguais =
+    alert(
 
-    existeImagem &&
-    existeLimite &&
+      "❌ ERRADO\n\n" +
+
+      "A função NÃO possui imagem nesse ponto.\n\n" +
+
+      "Logo NÃO existe continuidade."
+    );
+
+    return;
+  }
+
+  if (
+    Math.abs(
+      respostaImagem - imagem
+    ) > 0.05
+  ) {
+
+    alert(
+
+      "❌ ERRADO\n\n" +
+
+      "A imagem correta era:\n" +
+
+      format(imagem)
+    );
+
+    return;
+  }
+
+  // =========================
+  // 2° LIMITE
+  // =========================
+  let respostaLimite =
+    prompt(
+
+      "2° O limite existe?\n\n" +
+
+      "Digite o valor do limite."
+    );
+
+  if (
+    respostaLimite === null
+  ) return;
+
+  respostaLimite =
+    parseFloat(
+      respostaLimite
+      .replace(",", ".")
+    );
+
+  if (!lim.existe) {
+
+    alert(
+
+      "❌ ERRADO\n\n" +
+
+      "O limite NÃO existe.\n\n" +
+
+      "Logo NÃO existe continuidade."
+    );
+
+    return;
+  }
+
+  if (
+    Math.abs(
+      respostaLimite - lim.valor
+    ) > 0.05
+  ) {
+
+    alert(
+
+      "❌ ERRADO\n\n" +
+
+      "O limite correto era:\n" +
+
+      format(lim.valor)
+    );
+
+    return;
+  }
+
+  // =========================
+  // 3° IGUAIS?
+  // =========================
+  let iguais =
+    prompt(
+
+      "3° O limite e a imagem são iguais?\n\n" +
+
+      "Digite:\n" +
+
+      "sim\n" +
+
+      "ou\n" +
+
+      "não"
+    );
+
+  if (iguais === null)
+    return;
+
+  iguais =
+    iguais
+    .trim()
+    .toLowerCase();
+
+  const correto =
+
     Math.abs(
       imagem - lim.valor
     ) < 0.05;
 
-  const continua =
+  const alunoDisseSim =
 
-    existeImagem &&
-    existeLimite &&
-    iguais;
+    iguais === "sim";
 
-  let texto = "";
+  if (
+    correto &&
+    alunoDisseSim
+  ) {
 
-  texto +=
-    "1° Imagem existe? ";
+    alert(
 
-  texto +=
-    existeImagem
-    ? "✔ Sim\n"
-    : "❌ Não\n";
+      "✔ CORRETO!\n\n" +
 
-  texto +=
-    "2° Limite existe? ";
+      "A função é contínua nesse ponto."
+    );
+  }
 
-  texto +=
-    existeLimite
-    ? "✔ Sim\n"
-    : "❌ Não\n";
+  else if (
+    !correto &&
+    iguais === "não"
+  ) {
 
-  texto +=
-    "3° Limite = Imagem? ";
+    alert(
 
-  texto +=
-    iguais
-    ? "✔ Sim\n\n"
-    : "❌ Não\n\n";
+      "✔ CORRETO!\n\n" +
 
-  if (continua) {
-
-    texto +=
-      "✔ A função é contínua nesse ponto.";
+      "A função NÃO é contínua."
+    );
   }
 
   else {
 
-    texto +=
-      "❌ A função NÃO é contínua nesse ponto.";
+    alert(
+      "❌ ERRADO"
+    );
   }
-
-  alert(texto);
 };
 
 // =========================
