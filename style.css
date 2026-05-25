@@ -55,6 +55,9 @@ body {
   user-select: none;
 
   backdrop-filter: blur(4px);
+
+  /* MOBILE DRAG */
+  touch-action: none;
 }
 
 /* =========================
