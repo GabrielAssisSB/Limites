@@ -30,6 +30,8 @@ body {
 
   width: 100vw;
   height: 100vh;
+
+  pointer-events: auto;
 }
 
 /* =========================
@@ -42,7 +44,7 @@ body {
 
   position: absolute;
 
-  z-index: 999;
+  z-index: 99999;
 
   background: rgba(20,20,20,0.92);
 
@@ -56,7 +58,16 @@ body {
 
   backdrop-filter: blur(4px);
 
-  touch-action: none;
+  pointer-events: auto;
+}
+
+/* internos */
+#atividadeBox *,
+#limiteBox *,
+#continuidadeBox *,
+#aproximacaoBox * {
+
+  pointer-events: auto;
 }
 
 /* =========================
@@ -95,12 +106,6 @@ body {
   top: 190px;
 
   width: 240px;
-}
-
-/* começa escondido */
-#aproximacaoBox:not([open]) {
-
-  width: 170px;
 }
 
 /* =========================
