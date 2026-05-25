@@ -13,7 +13,6 @@ body {
 
   font-family: Arial;
 
-  /* FIX MOBILE */
   overscroll-behavior: none;
 
   touch-action: manipulation;
@@ -38,6 +37,7 @@ body {
 ========================= */
 #atividadeBox,
 #limiteBox,
+#continuidadeBox,
 #aproximacaoBox {
 
   position: absolute;
@@ -56,15 +56,12 @@ body {
 
   backdrop-filter: blur(4px);
 
-  /* MOBILE DRAG */
   touch-action: none;
 }
 
 /* =========================
    POSIÇÕES
 ========================= */
-
-/* atividade inferior esquerda */
 #atividadeBox {
 
   bottom: 10px;
@@ -76,7 +73,6 @@ body {
   align-items: center;
 }
 
-/* limite superior direita */
 #limiteBox {
 
   top: 10px;
@@ -87,13 +83,36 @@ body {
   gap: 5px;
 }
 
-/* aproximação */
+#continuidadeBox {
+
+  top: 120px;
+  right: 10px;
+}
+
 #aproximacaoBox {
 
   right: 10px;
-  top: 140px;
+  top: 190px;
 
   width: 240px;
+}
+
+/* começa escondido */
+#aproximacaoBox:not([open]) {
+
+  width: 170px;
+}
+
+/* =========================
+   DETAILS
+========================= */
+summary {
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  margin-bottom: 10px;
 }
 
 /* =========================
@@ -126,7 +145,6 @@ select {
 
   color: white;
 
-  /* FIX ZOOM MOBILE */
   font-size: 16px;
 }
 
@@ -156,7 +174,6 @@ td {
   text-align: center;
 }
 
-h3,
 h4 {
 
   margin: 5px 0;
@@ -174,6 +191,7 @@ h4 {
 
   #atividadeBox,
   #limiteBox,
+  #continuidadeBox,
   #aproximacaoBox {
 
     transform: scale(0.92);
