@@ -1,9 +1,10 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
 
   <meta charset="UTF-8">
+
   <meta name="viewport"
         content="
         width=device-width,
@@ -16,7 +17,6 @@
   <link rel="stylesheet"
         href="style.css">
 
-  <!-- GEOGEBRA -->
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
 
   <!-- ATIVIDADES -->
@@ -83,11 +83,24 @@
   </div>
 
   <!-- =========================
+       CONTINUIDADE
+  ========================== -->
+  <div id="continuidadeBox">
+
+    <button id="btnContinuidade">
+      Existe continuidade nesse ponto?
+    </button>
+
+  </div>
+
+  <!-- =========================
        APROXIMAÇÃO
   ========================== -->
-  <div id="aproximacaoBox">
+  <details id="aproximacaoBox">
 
-    <h3>Aproximação</h3>
+    <summary>
+      Aproximação
+    </summary>
 
     <div class="lado">
 
@@ -105,7 +118,7 @@
 
     </div>
 
-  </div>
+  </details>
 
   <!-- =========================
        GEOGEBRA
