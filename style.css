@@ -1,0 +1,136 @@
+body {
+
+  margin: 0;
+  overflow: hidden;
+  background: #111;
+
+  font-family: Arial;
+}
+
+/* =========================
+   GEOGEBRA
+========================= */
+#ggb-element {
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+/* =========================
+   PAINÉIS
+========================= */
+#atividadeBox,
+#limiteBox,
+#aproximacaoBox {
+
+  position: absolute;
+
+  z-index: 999;
+
+  background: rgba(20,20,20,0.92);
+
+  color: white;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  user-select: none;
+}
+
+/* =========================
+   POSIÇÕES
+========================= */
+
+/* atividade inferior esquerda */
+#atividadeBox {
+
+  bottom: 10px;
+  left: 10px;
+
+  display: flex;
+  gap: 5px;
+}
+
+/* limite superior direita */
+#limiteBox {
+
+  top: 10px;
+  right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* aproximação */
+#aproximacaoBox {
+
+  right: 10px;
+  top: 140px;
+
+  width: 240px;
+}
+
+/* =========================
+   CONTROLE X
+========================= */
+#controleX {
+
+  display: flex;
+  gap: 5px;
+}
+
+#controleX button {
+
+  width: 35px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+button,
+input,
+select {
+
+  padding: 6px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #222;
+
+  color: white;
+}
+
+/* =========================
+   TABELAS
+========================= */
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  margin-bottom: 10px;
+}
+
+td {
+
+  border: 1px solid #555;
+
+  padding: 4px;
+
+  text-align: center;
+}
+
+h3,
+h4 {
+
+  margin: 5px 0;
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>GeoGebra - Limites</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- GEOGEBRA -->
+  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+
+  <!-- ATIVIDADES -->
+  <script src="Limitebasico.js"></script>
+  <script src="Linear.js"></script>
+  <script src="Racional.js"></script>
+
+</head>
+
+<body>
+
+  <!-- =========================
+       ATIVIDADES
+  ========================== -->
+  <div id="atividadeBox">
+
+    <select id="atividadeSelect">
+
+      <option value="Limitebasico">
+        Limite básico
+      </option>
+
+      <option value="Linear">
+        Função linear
+      </option>
+
+      <option value="Racional">
+        Função racional
+      </option>
+
+    </select>
+
+    <button id="carregarAtividade">
+      Carregar atividade
+    </button>
+
+  </div>
+
+  <!-- =========================
+       LIMITE
+  ========================== -->
+  <div id="limiteBox">
+
+    <div id="controleX">
+
+      <button id="menosX">
+        ▼
+      </button>
+
+      <input id="limiteInput"
+             type="text"
+             placeholder="x tende a...">
+
+      <button id="maisX">
+        ▲
+      </button>
+
+    </div>
+
+    <button id="btnLimite">
+      Existe limite nesse ponto?
+    </button>
+
+  </div>
+
+  <!-- =========================
+       APROXIMAÇÃO
+  ========================== -->
+  <div id="aproximacaoBox">
+
+    <h3>Aproximação</h3>
+
+    <div class="lado">
+
+      <h4>Esquerda</h4>
+
+      <table id="tabelaEsquerda"></table>
+
+    </div>
+
+    <div class="lado">
+
+      <h4>Direita</h4>
+
+      <table id="tabelaDireita"></table>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+       GEOGEBRA
+  ========================== -->
+  <div id="ggb-element"></div>
+
+  <script src="objeto.js"></script>
+
+</body>
+</html>
