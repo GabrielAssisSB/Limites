@@ -12,7 +12,6 @@ window.addEventListener("load", () => {
     width: window.innerWidth,
     height: window.innerHeight,
 
-    // DESABILITADOS
     showToolBar: false,
     showZoomButtons: false,
 
@@ -32,7 +31,7 @@ window.addEventListener("load", () => {
 });
 
 // =========================
-// FIX MOBILE KEYBOARD
+// FIX MOBILE
 // =========================
 window.addEventListener("resize", () => {
 
@@ -47,7 +46,6 @@ window.addEventListener("resize", () => {
   );
 });
 
-// evita scroll automático
 document.addEventListener("focusin", () => {
 
   setTimeout(() => {
@@ -83,7 +81,7 @@ function format(n) {
 }
 
 // =========================
-// DRAG MOBILE + PC
+// DRAG
 // =========================
 function tornarArrastavel(el) {
 
@@ -92,9 +90,6 @@ function tornarArrastavel(el) {
   let offsetX = 0;
   let offsetY = 0;
 
-  // =========================
-  // DESKTOP
-  // =========================
   el.addEventListener(
     "mousedown",
     iniciarMouse
@@ -134,9 +129,6 @@ function tornarArrastavel(el) {
     );
   }
 
-  // =========================
-  // MOBILE
-  // =========================
   el.addEventListener(
     "touchstart",
     iniciarTouch,
@@ -188,9 +180,6 @@ function tornarArrastavel(el) {
     e.preventDefault();
   }
 
-  // =========================
-  // MOVER ELEMENTO
-  // =========================
   function moverElemento(x, y) {
 
     el.style.left =
@@ -203,9 +192,6 @@ function tornarArrastavel(el) {
     el.style.bottom = "auto";
   }
 
-  // =========================
-  // PARAR
-  // =========================
   function pararDrag() {
 
     dragging = false;
@@ -226,6 +212,10 @@ window.addEventListener("load", () => {
   );
 
   tornarArrastavel(
+    document.getElementById("continuidadeBox")
+  );
+
+  tornarArrastavel(
     document.getElementById("aproximacaoBox")
   );
 });
@@ -239,11 +229,20 @@ const input =
 const btnLimite =
   document.getElementById("btnLimite");
 
+const btnContinuidade =
+  document.getElementById("btnContinuidade");
+
+const aproxBox =
+  document.getElementById("aproximacaoBox");
+
 const btnMais =
   document.getElementById("maisX");
 
 const btnMenos =
   document.getElementById("menosX");
+
+// começa escondido
+aproxBox.removeAttribute("open");
 
 // =========================
 // BOTÕES ↑ ↓
@@ -253,10 +252,7 @@ btnMais.onclick = () => {
   let v =
     parseFloat(input.value);
 
-  if (!isFinite(v)) {
-
-    v = 0;
-  }
+  if (!isFinite(v)) v = 0;
 
   v++;
 
@@ -270,10 +266,7 @@ btnMenos.onclick = () => {
   let v =
     parseFloat(input.value);
 
-  if (!isFinite(v)) {
-
-    v = 0;
-  }
+  if (!isFinite(v)) v = 0;
 
   v--;
 
@@ -283,18 +276,15 @@ btnMenos.onclick = () => {
 };
 
 // =========================
-// INPUT MANUAL
+// INPUT
 // =========================
 input.addEventListener(
   "input",
-  () => {
-
-    atualizarTudo();
-  }
+  atualizarTudo
 );
 
 // =========================
-// ATUALIZAR TUDO
+// ATUALIZAR
 // =========================
 function atualizarTudo() {
 
@@ -321,19 +311,18 @@ function atualizarTudo() {
 
     a = parseFloat(raw);
 
-    if (!isFinite(a)) {
-
-      return;
-    }
+    if (!isFinite(a)) return;
   }
 
   atualizarPonto(a);
 
   atualizarTabela(a);
+
+  aproxBox.removeAttribute("open");
 }
 
 // =========================
-// PONTO AMARELO
+// PONTO
 // =========================
 function atualizarPonto(a) {
 
@@ -405,7 +394,7 @@ function f(x) {
 }
 
 // =========================
-// TABELA APROXIMAÇÃO
+// TABELA
 // =========================
 function atualizarTabela(a) {
 
@@ -422,8 +411,6 @@ function atualizarTabela(a) {
   esquerda.innerHTML = "";
   direita.innerHTML = "";
 
-  limparPontos();
-
   if (
     a === Infinity ||
     a === -Infinity
@@ -432,52 +419,32 @@ function atualizarTabela(a) {
     return;
   }
 
-  // APENAS 2 VALORES
   const passos = [
     0.1,
     0.01
   ];
 
-  passos.forEach((p, i) => {
+  passos.forEach((p) => {
 
-    // esquerda
     const xe = a - p;
-    const ye = f(xe);
+    const xd = a + p;
 
     adicionarLinha(
       esquerda,
       xe,
-      ye
+      f(xe)
     );
-
-    criarPonto(
-      xe,
-      ye,
-      i,
-      "E"
-    );
-
-    // direita
-    const xd = a + p;
-    const yd = f(xd);
 
     adicionarLinha(
       direita,
       xd,
-      yd
-    );
-
-    criarPonto(
-      xd,
-      yd,
-      i,
-      "D"
+      f(xd)
     );
   });
 }
 
 // =========================
-// LINHAS TABELA
+// LINHAS
 // =========================
 function adicionarLinha(
   tabela,
@@ -494,144 +461,19 @@ function adicionarLinha(
       <td>${format(y)}</td>
 
     </tr>
-
   `;
 }
 
 // =========================
-// PONTOS
+// VERIFICAR LIMITE
 // =========================
-function criarPonto(
-  x,
-  y,
-  i,
-  lado
-) {
+function verificarLimite(a) {
 
-  if (!ggb) return;
+  let left =
+    f(a - 0.001);
 
-  const nome =
-    `P_${lado}_${i}`;
-
-  ggb.evalCommand(
-    `${nome}=(${x},${y})`
-  );
-
-  // azul esquerda
-  if (lado === "E") {
-
-    ggb.setColor(
-      nome,
-      0,
-      120,
-      255
-    );
-  }
-
-  // vermelho direita
-  else {
-
-    ggb.setColor(
-      nome,
-      255,
-      0,
-      0
-    );
-  }
-
-  ggb.setPointSize(
-    nome,
-    5
-  );
-}
-
-// =========================
-// LIMPAR PONTOS
-// =========================
-function limparPontos() {
-
-  if (!ggb) return;
-
-  for (let i = 0; i < 5; i++) {
-
-    try {
-
-      ggb.deleteObject(
-        `P_E_${i}`
-      );
-
-    } catch {}
-
-    try {
-
-      ggb.deleteObject(
-        `P_D_${i}`
-      );
-
-    } catch {}
-  }
-}
-
-// =========================
-// LIMITES
-// =========================
-btnLimite.onclick = () => {
-
-  const raw =
-    input.value
-    .trim()
-    .toLowerCase();
-
-  let a;
-
-  if (raw === "infinito") {
-
-    a = Infinity;
-  }
-
-  else if (
-    raw === "-infinito"
-  ) {
-
-    a = -Infinity;
-  }
-
-  else {
-
-    a = parseFloat(raw);
-
-    if (!isFinite(a)) {
-
-      alert(
-        "Valor inválido"
-      );
-
-      return;
-    }
-  }
-
-  let left;
-  let right;
-
-  if (a === Infinity) {
-
-    left = f(1000);
-    right = f(10000);
-  }
-
-  else if (
-    a === -Infinity
-  ) {
-
-    left = f(-1000);
-    right = f(-10000);
-  }
-
-  else {
-
-    left = f(a - 0.001);
-    right = f(a + 0.001);
-  }
+  let right =
+    f(a + 0.001);
 
   const existe =
 
@@ -640,11 +482,37 @@ btnLimite.onclick = () => {
     Math.abs(left - right)
     < 0.05;
 
-  const limite =
+  return {
 
-    existe
+    existe,
+
+    valor:
+      existe
       ? (left + right) / 2
-      : null;
+      : null,
+
+    esquerda: left,
+    direita: right
+  };
+}
+
+// =========================
+// LIMITE
+// =========================
+btnLimite.onclick = () => {
+
+  const a =
+    parseFloat(input.value);
+
+  if (!isFinite(a)) {
+
+    alert("Valor inválido");
+
+    return;
+  }
+
+  const lim =
+    verificarLimite(a);
 
   let resp =
     prompt(
@@ -654,59 +522,30 @@ btnLimite.onclick = () => {
   if (resp === null) return;
 
   resp =
-    resp.trim()
-    .toLowerCase();
+    parseFloat(
+      resp.replace(",", ".")
+    );
 
-  let aluno;
+  // MOSTRA APROXIMAÇÃO
+  aproxBox.setAttribute(
+    "open",
+    true
+  );
 
-  if (
-    resp === "infinito" ||
-    resp === "+infinito"
-  ) {
+  if (lim.existe) {
 
-    aluno = Infinity;
-  }
-
-  else if (
-    resp === "-infinito"
-  ) {
-
-    aluno = -Infinity;
-  }
-
-  else {
-
-    aluno =
-      parseFloat(
-        resp.replace(",", ".")
-      );
-
-    if (!isFinite(aluno)) {
-
-      alert(
-        "Resposta inválida"
-      );
-
-      return;
-    }
-  }
-
-  if (existe) {
-
-    const correto =
-
+    if (
       Math.abs(
-        aluno - limite
-      ) < 0.05;
-
-    if (correto) {
+        resp - lim.valor
+      ) < 0.05
+    ) {
 
       alert(
 
         "✔ Correto!\n\n" +
 
         "Limite = " +
-        format(limite)
+        format(lim.valor)
       );
     }
 
@@ -717,7 +556,7 @@ btnLimite.onclick = () => {
         "❌ Errado!\n\n" +
 
         "Correto: " +
-        format(limite)
+        format(lim.valor)
       );
     }
   }
@@ -729,12 +568,94 @@ btnLimite.onclick = () => {
       "❌ O limite NÃO existe\n\n" +
 
       "Esquerda = " +
-      format(left) +
+      format(lim.esquerda) +
 
       "\nDireita = " +
-      format(right)
+      format(lim.direita)
     );
   }
+};
+
+// =========================
+// CONTINUIDADE
+// =========================
+btnContinuidade.onclick = () => {
+
+  const a =
+    parseFloat(input.value);
+
+  if (!isFinite(a)) {
+
+    alert("Valor inválido");
+
+    return;
+  }
+
+  const lim =
+    verificarLimite(a);
+
+  const imagem =
+    f(a);
+
+  const existeImagem =
+    isFinite(imagem);
+
+  const existeLimite =
+    lim.existe;
+
+  const iguais =
+
+    existeImagem &&
+    existeLimite &&
+    Math.abs(
+      imagem - lim.valor
+    ) < 0.05;
+
+  const continua =
+
+    existeImagem &&
+    existeLimite &&
+    iguais;
+
+  let texto = "";
+
+  texto +=
+    "1° Imagem existe? ";
+
+  texto +=
+    existeImagem
+    ? "✔ Sim\n"
+    : "❌ Não\n";
+
+  texto +=
+    "2° Limite existe? ";
+
+  texto +=
+    existeLimite
+    ? "✔ Sim\n"
+    : "❌ Não\n";
+
+  texto +=
+    "3° Limite = Imagem? ";
+
+  texto +=
+    iguais
+    ? "✔ Sim\n\n"
+    : "❌ Não\n\n";
+
+  if (continua) {
+
+    texto +=
+      "✔ A função é contínua nesse ponto.";
+  }
+
+  else {
+
+    texto +=
+      "❌ A função NÃO é contínua nesse ponto.";
+  }
+
+  alert(texto);
 };
 
 // =========================
