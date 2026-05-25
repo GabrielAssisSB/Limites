@@ -32,6 +32,32 @@ window.addEventListener("load", () => {
 });
 
 // =========================
+// FIX MOBILE KEYBOARD
+// =========================
+window.addEventListener("resize", () => {
+
+  document.body.style.height =
+    window.innerHeight + "px";
+
+  if (!ggb) return;
+
+  ggb.setSize(
+    window.innerWidth,
+    window.innerHeight
+  );
+});
+
+// evita scroll automático
+document.addEventListener("focusin", () => {
+
+  setTimeout(() => {
+
+    window.scrollTo(0, 0);
+
+  }, 50);
+});
+
+// =========================
 // FORMATAR
 // =========================
 function format(n) {
@@ -680,19 +706,3 @@ document
     atv.nome
   );
 };
-
-// =========================
-// RESIZE
-// =========================
-window.addEventListener(
-  "resize",
-  () => {
-
-    if (!ggb) return;
-
-    ggb.setSize(
-      window.innerWidth,
-      window.innerHeight
-    );
-  }
-);
