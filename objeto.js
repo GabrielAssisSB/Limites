@@ -83,52 +83,133 @@ function format(n) {
 }
 
 // =========================
-// DRAG
+// DRAG MOBILE + PC
 // =========================
 function tornarArrastavel(el) {
 
-  let drag = false;
+  let dragging = false;
 
-  let startX = 0;
-  let startY = 0;
+  let offsetX = 0;
+  let offsetY = 0;
 
-  el.addEventListener("mousedown", (e) => {
+  // =========================
+  // DESKTOP
+  // =========================
+  el.addEventListener(
+    "mousedown",
+    iniciarMouse
+  );
 
-    drag = true;
+  document.addEventListener(
+    "mousemove",
+    moverMouse
+  );
 
-    startX = e.clientX;
-    startY = e.clientY;
-  });
+  document.addEventListener(
+    "mouseup",
+    pararDrag
+  );
 
-  document.addEventListener("mousemove", (e) => {
+  function iniciarMouse(e) {
 
-    if (!drag) return;
+    dragging = true;
 
     const rect =
       el.getBoundingClientRect();
 
-    const dx =
-      e.clientX - startX;
+    offsetX =
+      e.clientX - rect.left;
 
-    const dy =
-      e.clientY - startY;
+    offsetY =
+      e.clientY - rect.top;
+  }
+
+  function moverMouse(e) {
+
+    if (!dragging) return;
+
+    moverElemento(
+      e.clientX,
+      e.clientY
+    );
+  }
+
+  // =========================
+  // MOBILE
+  // =========================
+  el.addEventListener(
+    "touchstart",
+    iniciarTouch,
+    { passive: false }
+  );
+
+  document.addEventListener(
+    "touchmove",
+    moverTouch,
+    { passive: false }
+  );
+
+  document.addEventListener(
+    "touchend",
+    pararDrag
+  );
+
+  function iniciarTouch(e) {
+
+    dragging = true;
+
+    const touch =
+      e.touches[0];
+
+    const rect =
+      el.getBoundingClientRect();
+
+    offsetX =
+      touch.clientX - rect.left;
+
+    offsetY =
+      touch.clientY - rect.top;
+
+    e.preventDefault();
+  }
+
+  function moverTouch(e) {
+
+    if (!dragging) return;
+
+    const touch =
+      e.touches[0];
+
+    moverElemento(
+      touch.clientX,
+      touch.clientY
+    );
+
+    e.preventDefault();
+  }
+
+  // =========================
+  // MOVER ELEMENTO
+  // =========================
+  function moverElemento(x, y) {
 
     el.style.left =
-      rect.left + dx + "px";
+      (x - offsetX) + "px";
 
     el.style.top =
-      rect.top + dy + "px";
+      (y - offsetY) + "px";
 
     el.style.right = "auto";
+    el.style.bottom = "auto";
+  }
 
-    startX = e.clientX;
-    startY = e.clientY;
-  });
+  // =========================
+  // PARAR
+  // =========================
+  function pararDrag() {
 
-  document.addEventListener("mouseup", () => {
-
-    drag = false;
-  });
+    dragging = false;
+  }
 }
 
 // =========================
@@ -204,10 +285,13 @@ btnMenos.onclick = () => {
 // =========================
 // INPUT MANUAL
 // =========================
-input.addEventListener("input", () => {
+input.addEventListener(
+  "input",
+  () => {
 
-  atualizarTudo();
-});
+    atualizarTudo();
+  }
+);
 
 // =========================
 // ATUALIZAR TUDO
@@ -518,7 +602,9 @@ btnLimite.onclick = () => {
 
     if (!isFinite(a)) {
 
-      alert("Valor inválido");
+      alert(
+        "Valor inválido"
+      );
 
       return;
     }
@@ -568,7 +654,8 @@ btnLimite.onclick = () => {
   if (resp === null) return;
 
   resp =
-    resp.trim().toLowerCase();
+    resp.trim()
+    .toLowerCase();
 
   let aluno;
 
