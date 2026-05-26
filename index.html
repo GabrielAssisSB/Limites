@@ -2,148 +2,76 @@
 <html lang="pt-BR">
 
 <head>
-
   <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="
-        width=device-width,
-        initial-scale=1,
-        maximum-scale=1,
-        user-scalable=no">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>GeoGebra - Limites</title>
-
-  <link rel="stylesheet"
-        href="style.css">
-
+  <link rel="stylesheet" href="style.css">
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
-
-  <!-- atividades -->
   <script src="Limitebasico.js"></script>
   <script src="Linear.js"></script>
   <script src="Racional.js"></script>
-
 </head>
 
 <body>
 
-  <!-- =========================
-       ATIVIDADES
-  ========================== -->
-  <div id="atividadeBox">
-
+  <!-- PAINEL ATIVIDADES -->
+  <div id="atividadeBox" class="painel">
     <select id="atividadeSelect">
-
-      <option value="Limitebasico">
-        Limite básico
-      </option>
-
-      <option value="Linear">
-        Função linear
-      </option>
-
-      <option value="Racional">
-        Função racional
-      </option>
-
+      <option value="Limitebasico">📐 Limite básico</option>
+      <option value="Linear">📈 Função linear</option>
+      <option value="Racional">🧮 Função racional</option>
     </select>
-
-    <button id="carregarAtividade">
-      Carregar atividade
-    </button>
-
+    <button id="carregarAtividade">Carregar</button>
   </div>
 
-  <!-- =========================
-       LIMITE
-  ========================== -->
-  <div id="limiteBox">
-
+  <!-- PAINEL LIMITE -->
+  <div id="limiteBox" class="painel">
+    <div class="painel-titulo">📊 Análise do Limite</div>
+    
     <div id="controleX">
-
-      <button id="menosX">
-        ▼
-      </button>
-
-      <input id="limiteInput"
-             type="text"
-             placeholder="x tende a...">
-
-      <button id="maisX">
-        ▲
-      </button>
-
+      <button id="menosX">−</button>
+      <input id="limiteInput" type="text" placeholder="x → ?" value="0">
+      <button id="maisX">+</button>
     </div>
-
-    <!-- epsilon -->
+    
     <div id="epsilonBox">
-
-      <label>
-        Aproximação:
-      </label>
-
-      <input id="epsilonSlider"
-             type="range"
-             min="0.001"
-             max="1"
-             step="0.001"
-             value="0.1">
-
-      <span id="epsilonValor">
-        0.1
-      </span>
-
+      <label>ε:</label>
+      <input id="epsilonSlider" type="range" min="0.001" max="1" step="0.001" value="0.1">
+      <span id="epsilonValor">0.100</span>
     </div>
-
-    <button id="btnLimite">
-      Existe limite nesse ponto?
-    </button>
-
+    
+    <button id="btnLimite" class="botao-primario">❓ Verificar limite</button>
+    <button id="btnContinuidade" class="botao-secundario">🔄 Verificar continuidade</button>
   </div>
 
-  <!-- =========================
-       CONTINUIDADE
-  ========================== -->
-  <div id="continuidadeBox">
-
-    <button id="btnContinuidade">
-      Existe continuidade nesse ponto?
-    </button>
-
+  <!-- PAINEL CONTINUIDADE (REDUNDANTE, MAS MANTIDO) -->
+  <div id="continuidadeBox" class="painel">
+    <button id="btnContinuidade2">🔄 Continuidade</button>
   </div>
 
-  <!-- =========================
-       APROXIMAÇÃO
-  ========================== -->
-  <details id="aproximacaoBox">
-
-    <summary>
-      Aproximação
-    </summary>
-
+  <!-- PAINEL APROXIMAÇÃO -->
+  <details id="aproximacaoBox" class="painel">
+    <summary>📋 Aproximações</summary>
     <div class="lado">
-
-      <h4>Esquerda</h4>
-
-      <table id="tabelaEsquerda"></table>
-
+      <h4>← Esquerda</h4>
+      <table id="tabelaEsquerda">
+        <thead><tr><th>x</th><th>f(x)</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
-
     <div class="lado">
-
-      <h4>Direita</h4>
-
-      <table id="tabelaDireita"></table>
-
+      <h4>Direita →</h4>
+      <table id="tabelaDireita">
+        <thead><tr><th>x</th><th>f(x)</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
-
   </details>
 
-  <!-- geogebra -->
+  <!-- GEOGEBRA -->
   <div id="ggb-element"></div>
 
   <script src="objeto.js"></script>
-
 </body>
+
 </html>
