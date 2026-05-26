@@ -1,7 +1,7 @@
 let ggb;
 
 // =========================
-// INIT
+// INIT GEOGEBRA
 // =========================
 window.addEventListener("load", () => {
 
@@ -24,8 +24,35 @@ window.addEventListener("load", () => {
     }
   };
 
-  new GGBApplet(params, true)
-    .inject("ggb-element");
+  const applet =
+    new GGBApplet(params, true);
+
+  applet.inject("ggb-element");
+});
+
+// =========================
+// FIX MOBILE
+// =========================
+window.addEventListener("resize", () => {
+
+  document.body.style.height =
+    window.innerHeight + "px";
+
+  if (!ggb) return;
+
+  ggb.setSize(
+    window.innerWidth,
+    window.innerHeight
+  );
+});
+
+document.addEventListener("focusin", () => {
+
+  setTimeout(() => {
+
+    window.scrollTo(0, 0);
+
+  }, 50);
 });
 
 // =========================
@@ -61,14 +88,24 @@ const epsilonValor =
     "epsilonValor"
   );
 
-let epsilon =
-  parseFloat(
-    epsilonSlider.value
+const btnMais =
+  document.getElementById(
+    "maisX"
+  );
+
+const btnMenos =
+  document.getElementById(
+    "menosX"
   );
 
 // =========================
 // EPSILON
 // =========================
+let epsilon =
+  parseFloat(
+    epsilonSlider.value
+  );
+
 epsilonSlider.oninput = () => {
 
   epsilon =
@@ -120,6 +157,7 @@ function tornarArrastavel(el) {
   let offsetX = 0;
   let offsetY = 0;
 
+  // DESKTOP
   el.addEventListener(
     "mousedown",
     (e) => {
@@ -159,6 +197,7 @@ function tornarArrastavel(el) {
     }
   );
 
+  // MOBILE
   el.addEventListener(
     "touchstart",
     (e) => {
@@ -260,6 +299,8 @@ window.addEventListener(
 // =========================
 function f(x) {
 
+  if (!ggb) return NaN;
+
   const nomes =
     ggb.getAllObjectNames();
 
@@ -277,8 +318,10 @@ function f(x) {
             `${n}(${x})`
           );
 
-        if (!isNaN(y))
+        if (!isNaN(y)) {
+
           return y;
+        }
       }
 
     } catch {}
@@ -288,9 +331,11 @@ function f(x) {
 }
 
 // =========================
-// PONTO AMARELO
+// PONTO X TENDE
 // =========================
 function atualizarPonto(a) {
+
+  if (!ggb) return;
 
   try {
 
@@ -300,8 +345,9 @@ function atualizarPonto(a) {
 
   } catch {}
 
-  if (!isFinite(a))
-    return;
+  if (
+    !isFinite(a)
+  ) return;
 
   ggb.evalCommand(
     `P_lim=(${a},0)`
@@ -318,10 +364,16 @@ function atualizarPonto(a) {
     "P_lim",
     8
   );
+
+  ggb.setFixed(
+    "P_lim",
+    true,
+    false
+  );
 }
 
 // =========================
-// PONTOS APROXIMAÇÃO
+// CRIAR PONTOS
 // =========================
 function criarPonto(
   x,
@@ -331,6 +383,8 @@ function criarPonto(
   g,
   b
 ) {
+
+  if (!ggb) return;
 
   try {
 
@@ -361,10 +415,16 @@ function criarPonto(
     nome,
     5
   );
+
+  ggb.setFixed(
+    nome,
+    true,
+    false
+  );
 }
 
 // =========================
-// TABELA
+// TABELA APROXIMAÇÃO
 // =========================
 function atualizarTabela(a) {
 
@@ -381,6 +441,7 @@ function atualizarTabela(a) {
   esquerda.innerHTML = "";
   direita.innerHTML = "";
 
+  // limpa pontos
   for (let i = 0; i < 5; i++) {
 
     try {
@@ -388,6 +449,10 @@ function atualizarTabela(a) {
       ggb.deleteObject(
         `P_E_${i}`
       );
+
+    } catch {}
+
+    try {
 
       ggb.deleteObject(
         `P_D_${i}`
@@ -400,7 +465,9 @@ function atualizarTabela(a) {
     return;
 
   const passos = [
+
     epsilon,
+
     epsilon / 10
   ];
 
@@ -413,17 +480,27 @@ function atualizarTabela(a) {
     const yd = f(xd);
 
     esquerda.innerHTML += `
+
       <tr>
+
         <td>${format(xe)}</td>
+
         <td>${format(ye)}</td>
+
       </tr>
+
     `;
 
     direita.innerHTML += `
+
       <tr>
+
         <td>${format(xd)}</td>
+
         <td>${format(yd)}</td>
+
       </tr>
+
     `;
 
     criarPonto(
@@ -452,10 +529,10 @@ function atualizarTabela(a) {
 function verificarLimite(a) {
 
   const left =
-    f(a - epsilon/100);
+    f(a - epsilon / 100);
 
   const right =
-    f(a + epsilon/100);
+    f(a + epsilon / 100);
 
   const existe =
 
@@ -475,7 +552,7 @@ function verificarLimite(a) {
 
     valor:
       existe
-      ? (left + right)/2
+      ? (left + right) / 2
       : null
   };
 }
@@ -485,10 +562,30 @@ function verificarLimite(a) {
 // =========================
 function atualizarTudo() {
 
-  const a =
-    parseFloat(
-      input.value
-    );
+  const raw =
+    input.value
+    .trim()
+    .toLowerCase();
+
+  let a;
+
+  if (raw === "infinito") {
+
+    a = Infinity;
+  }
+
+  else if (
+    raw === "-infinito"
+  ) {
+
+    a = -Infinity;
+  }
+
+  else {
+
+    a =
+      parseFloat(raw);
+  }
 
   if (!isFinite(a))
     return;
@@ -502,17 +599,18 @@ function atualizarTudo() {
   );
 }
 
+// =========================
+// INPUT
+// =========================
 input.addEventListener(
   "input",
   atualizarTudo
 );
 
 // =========================
-// BOTÕES X
+// BOTÕES ↑ ↓
 // =========================
-document
-.getElementById("maisX")
-.onclick = () => {
+btnMais.onclick = () => {
 
   let v =
     parseFloat(
@@ -529,9 +627,7 @@ document
   atualizarTudo();
 };
 
-document
-.getElementById("menosX")
-.onclick = () => {
+btnMenos.onclick = () => {
 
   let v =
     parseFloat(
@@ -549,7 +645,7 @@ document
 };
 
 // =========================
-// LIMITE
+// LIMITES
 // =========================
 btnLimite.onclick = () => {
 
@@ -577,8 +673,9 @@ btnLimite.onclick = () => {
       "1° Qual o limite lateral ESQUERDO?"
     );
 
-  if (esquerda === null)
-    return;
+  if (
+    esquerda === null
+  ) return;
 
   esquerda =
     parseFloat(
@@ -592,23 +689,25 @@ btnLimite.onclick = () => {
       "2° Qual o limite lateral DIREITO?"
     );
 
-  if (direita === null)
-    return;
+  if (
+    direita === null
+  ) return;
 
   direita =
     parseFloat(
       direita.replace(",", ".")
     );
 
-  // existe?
+  // existe
   let existe =
     prompt(
 
       "3° Existe limite?\n\nDigite:\nsim\nou\nnão"
     );
 
-  if (existe === null)
-    return;
+  if (
+    existe === null
+  ) return;
 
   existe =
     existe
@@ -623,6 +722,7 @@ btnLimite.onclick = () => {
   let texto = "";
 
   texto +=
+
     "Limite lateral ESQUERDO:\n" +
 
     format(
@@ -632,6 +732,7 @@ btnLimite.onclick = () => {
     "\n\n";
 
   texto +=
+
     "Limite lateral DIREITO:\n" +
 
     format(
@@ -654,13 +755,17 @@ btnLimite.onclick = () => {
 
   const corretoExiste =
 
-    (lim.existe &&
-    existe === "sim")
+    (
+      lim.existe &&
+      existe === "sim"
+    )
 
     ||
 
-    (!lim.existe &&
-    existe === "não");
+    (
+      !lim.existe &&
+      existe === "não"
+    );
 
   if (
     corretoEsq &&
@@ -704,144 +809,6 @@ btnContinuidade.onclick = () => {
     verificarLimite(a);
 
   const imagem =
-    f(a);
-
-  let respostaImagem =
-    prompt(
-
-      "1° Digite a imagem:"
-    );
-
-  if (
-    respostaImagem === null
-  ) return;
-
-  respostaImagem =
-    parseFloat(
-      respostaImagem
-      .replace(",", ".")
-    );
-
-  if (
-    !isFinite(imagem)
-  ) {
-
-    alert(
-
-      "❌ Não existe imagem.\n\nLogo não há continuidade."
-    );
-
-    return;
-  }
-
-  if (
-    Math.abs(
-      respostaImagem - imagem
-    ) > 0.05
-  ) {
-
-    alert(
-
-      "❌ Imagem incorreta.\n\nImagem correta:\n" +
-
-      format(imagem)
-    );
-
-    return;
-  }
-
-  let respostaLimite =
-    prompt(
-
-      "2° Digite o limite:"
-    );
-
-  if (
-    respostaLimite === null
-  ) return;
-
-  respostaLimite =
-    parseFloat(
-      respostaLimite
-      .replace(",", ".")
-    );
-
-  if (!lim.existe) {
-
-    alert(
-
-      "❌ O limite não existe.\n\nLogo não há continuidade."
-    );
-
-    return;
-  }
-
-  if (
-    Math.abs(
-      respostaLimite - lim.valor
-    ) > 0.05
-  ) {
-
-    alert(
-
-      "❌ Limite incorreto.\n\nCorreto:\n" +
-
-      format(lim.valor)
-    );
-
-    return;
-  }
-
-  let iguais =
-    prompt(
-
-      "3° Limite e imagem são iguais?\n\nsim ou não"
-    );
-
-  if (iguais === null)
-    return;
-
-  iguais =
-    iguais
-    .trim()
-    .toLowerCase();
-
-  const correto =
-
-    Math.abs(
-      imagem - lim.valor
-    ) < 0.05;
-
-  if (
-    correto &&
-    iguais === "sim"
-  ) {
-
-    alert(
-
-      "✔ A função é contínua."
-    );
-  }
-
-  else if (
-    !correto &&
-    iguais === "não"
-  ) {
-
-    alert(
-
-      "✔ A função NÃO é contínua."
-    );
-  }
-
-  else {
-
-    alert(
-      "❌ Resposta incorreta."
-    );
-  }
-};
-const imagem =
     f(a);
 
   // =========================
@@ -1067,7 +1034,7 @@ document
     atv.funcao
   );
 
-  // valor limite
+  // valor do limite
   input.value =
     atv.tende;
 
