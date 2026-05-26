@@ -3,29 +3,34 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   background: #111;
   font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
 /* =========================
-   GEOGEBRA
+   GEOGEBRA - PRIORIDADE TOTAL
 ========================= */
 #ggb-element {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   background: #fff;
 }
 
-#ggb-element canvas {
-  touch-action: manipulation;
+/* Garantir que o canvas do GeoGebra ocupe tudo */
+#ggb-element canvas,
+#ggb-element div,
+.ggb-container {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* =========================
-   PAINÉIS - VERSÃO COMPACTA
+   PAINÉIS - FLUTUANTES SOBRE O GEOGEBRA
 ========================= */
 .painel {
   position: fixed;
@@ -41,7 +46,7 @@ html, body {
   font-size: 14px;
 }
 
-/* PAINEL ATIVIDADES (canto inferior esquerdo) */
+/* PAINEL ATIVIDADES */
 #atividadeBox {
   left: 10px;
   bottom: 10px;
@@ -50,7 +55,7 @@ html, body {
   padding: 8px 10px;
 }
 
-/* PAINEL LIMITE (canto superior direito) */
+/* PAINEL LIMITE */
 #limiteBox {
   top: 10px;
   right: 10px;
@@ -60,14 +65,13 @@ html, body {
   gap: 8px;
 }
 
-/* PAINEL APROXIMAÇÃO (abaixo do limite) */
+/* PAINEL APROXIMAÇÃO */
 #aproximacaoBox {
   top: 230px;
   right: 10px;
   width: 240px;
 }
 
-/* Títulos compactos */
 .painel-titulo {
   font-weight: bold;
   font-size: 14px;
@@ -75,7 +79,6 @@ html, body {
   text-align: center;
 }
 
-/* Controle X */
 #controleX {
   display: flex;
   gap: 5px;
@@ -88,7 +91,6 @@ html, body {
   font-weight: bold;
 }
 
-/* Inputs e botões */
 button, input, select {
   border: none;
   border-radius: 8px;
@@ -100,7 +102,6 @@ button, input, select {
 
 button {
   cursor: pointer;
-  transition: 0.1s;
 }
 
 button:active {
@@ -111,19 +112,10 @@ button:active {
   background: #1e3a5f;
 }
 
-.botao-primario:active {
-  background: #2a4a7a;
-}
-
 .botao-secundario {
   background: #3a2a1e;
 }
 
-.botao-secundario:active {
-  background: #4a3a2e;
-}
-
-/* Epsilon */
 #epsilonBox {
   display: flex;
   align-items: center;
@@ -141,7 +133,6 @@ button:active {
   font-family: monospace;
 }
 
-/* Details (Aproximações) */
 summary {
   cursor: pointer;
   font-size: 14px;
@@ -153,7 +144,6 @@ summary:hover {
   color: #ffaa00;
 }
 
-/* Tabelas */
 .lado {
   margin-top: 8px;
 }
@@ -181,7 +171,7 @@ th {
 }
 
 /* =========================
-   MOBILE (TELAS MENORES QUE 700px)
+   MOBILE
 ========================= */
 @media (max-width: 700px) {
   .painel {
@@ -195,18 +185,10 @@ th {
   
   #limiteBox {
     gap: 6px;
-    top: 8px;
-    right: 8px;
   }
   
   #aproximacaoBox {
     top: 210px;
-    right: 8px;
-  }
-  
-  #atividadeBox {
-    left: 8px;
-    bottom: 8px;
   }
   
   button, input, select {
@@ -216,7 +198,6 @@ th {
   
   #controleX button {
     width: 34px;
-    padding: 6px;
   }
   
   .painel-titulo {
@@ -247,19 +228,5 @@ th {
   #atividadeBox button {
     padding: 5px 8px;
     font-size: 11px;
-  }
-}
-
-/* =========================
-   TABLET (701px - 1024px)
-========================= */
-@media (min-width: 701px) and (max-width: 1024px) {
-  #limiteBox,
-  #aproximacaoBox {
-    width: 220px;
-  }
-  
-  #aproximacaoBox {
-    top: 215px;
   }
 }
