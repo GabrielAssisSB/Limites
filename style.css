@@ -3,34 +3,26 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: #111;
   font-family: Arial, sans-serif;
-  overflow: hidden;
 }
 
-/* =========================
-   GEOGEBRA - FUNDO (z-index baixo)
-========================= */
+/* GEOGEBRA - FUNDO */
 #ggb-element {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   background: #fff;
 }
 
-/* Forçar o canvas do GeoGebra a aparecer */
-#ggb-element > * {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* =========================
-   PAINÉIS - FLUTUANTES (z-index alto)
-========================= */
-.painel {
+/* PAINÉIS FLUTUANTES */
+#atividadeBox,
+#limiteBox,
+#aproximacaoBox {
   position: fixed;
   z-index: 9999;
   background: rgba(20, 20, 20, 0.92);
@@ -44,16 +36,7 @@ html, body {
   font-size: 14px;
 }
 
-/* PAINEL ATIVIDADES */
-#atividadeBox {
-  left: 10px;
-  bottom: 10px;
-  display: flex;
-  gap: 6px;
-  padding: 8px 10px;
-}
-
-/* PAINEL LIMITE */
+/* POSIÇÕES */
 #limiteBox {
   top: 10px;
   right: 10px;
@@ -63,38 +46,47 @@ html, body {
   gap: 8px;
 }
 
-/* PAINEL APROXIMAÇÃO */
 #aproximacaoBox {
   top: 230px;
   right: 10px;
   width: 240px;
 }
 
-/* Resto do CSS igual... */
+#atividadeBox {
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+/* TÍTULO */
 .painel-titulo {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 4px;
   text-align: center;
 }
 
+/* CONTROLE X */
 #controleX {
   display: flex;
   gap: 5px;
 }
 
 #controleX button {
-  width: 40px;
-  padding: 8px;
+  width: 38px;
+  padding: 6px;
   font-size: 16px;
   font-weight: bold;
 }
 
+/* BOTÕES E INPUTS */
 button, input, select {
   border: none;
   border-radius: 8px;
-  padding: 8px;
-  font-size: 14px;
+  padding: 6px 8px;
+  font-size: 13px;
   background: #222;
   color: white;
 }
@@ -107,19 +99,20 @@ button:active {
   background: #333;
 }
 
-.botao-primario {
+#btnLimite {
   background: #1e3a5f;
 }
 
-.botao-secundario {
+#btnContinuidade {
   background: #3a2a1e;
 }
 
+/* EPSILON */
 #epsilonBox {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 #epsilonSlider {
@@ -132,9 +125,10 @@ button:active {
   font-family: monospace;
 }
 
+/* DETAILS (APROXIMAÇÃO) */
 summary {
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   padding: 4px 0;
 }
@@ -148,7 +142,7 @@ summary:hover {
 }
 
 .lado h4 {
-  font-size: 12px;
+  font-size: 11px;
   margin: 6px 0;
   text-align: center;
 }
@@ -156,7 +150,7 @@ summary:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 td, th {
@@ -169,48 +163,39 @@ th {
   background: #333;
 }
 
-/* MOBILE */
+/* MOBILE - PAINÉIS AINDA MENORES */
 @media (max-width: 700px) {
-  .painel {
-    padding: 8px;
-  }
-  
   #limiteBox,
   #aproximacaoBox {
     width: 200px;
-  }
-  
-  #limiteBox {
-    gap: 6px;
   }
   
   #aproximacaoBox {
     top: 210px;
   }
   
+  #limiteBox {
+    gap: 6px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  #atividadeBox {
+    left: 8px;
+    bottom: 8px;
+  }
+  
   button, input, select {
-    padding: 6px;
-    font-size: 12px;
-  }
-  
-  #controleX button {
-    width: 34px;
-  }
-  
-  .painel-titulo {
-    font-size: 12px;
-  }
-  
-  #epsilonBox {
+    padding: 5px 6px;
     font-size: 11px;
   }
   
-  summary {
-    font-size: 12px;
+  #controleX button {
+    width: 32px;
   }
   
-  .lado h4 {
-    font-size: 10px;
+  .painel-titulo {
+    font-size: 11px;
   }
   
   table {
@@ -219,11 +204,5 @@ th {
   
   td, th {
     padding: 3px;
-  }
-  
-  #atividadeBox select,
-  #atividadeBox button {
-    padding: 5px 8px;
-    font-size: 11px;
   }
 }
