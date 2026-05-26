@@ -15,7 +15,16 @@ window.addEventListener("load", () => {
     enableShiftDragZoom: true,
     appletOnLoad(api) {
       ggb = api;
-      setTimeout(() => atualizarTudo(), 500);
+      setTimeout(() => {
+        // Carrega função padrão (Limite básico)
+        if (window.ATIVIDADES && ATIVIDADES.Limitebasico) {
+          ggb.evalCommand(ATIVIDADES.Limitebasico.funcao);
+          input.value = ATIVIDADES.Limitebasico.tende;
+        } else {
+          ggb.evalCommand("f(x)=x^2");
+        }
+        atualizarTudo();
+      }, 1000);
     }
   };
   new GGBApplet(params, true).inject("ggb-element");
@@ -25,7 +34,6 @@ window.addEventListener("load", () => {
 // RESIZE
 // =========================
 window.addEventListener("resize", () => {
-  document.body.style.height = window.innerHeight + "px";
   if (ggb) ggb.setSize(window.innerWidth, window.innerHeight);
 });
 
@@ -49,9 +57,6 @@ epsilonSlider.oninput = () => {
   atualizarTudo();
 };
 
-// =========================
-// FORMATAR
-// =========================
 function format(n) {
   if (!isFinite(n)) return n > 0 ? "+∞" : "-∞";
   let v = Math.round(n * 1000) / 1000;
@@ -59,7 +64,7 @@ function format(n) {
 }
 
 // =========================
-// DRAG (MOBILE + DESKTOP)
+// DRAG DOS PAINÉIS (MOBILE + DESKTOP)
 // =========================
 function tornarArrastavel(el) {
   let ativo = false, offsetX = 0, offsetY = 0;
@@ -126,9 +131,6 @@ function f(x) {
   return NaN;
 }
 
-// =========================
-// PONTO X TENDE
-// =========================
 function atualizarPonto(a) {
   if (!ggb) return;
   try { ggb.deleteObject("P_lim"); } catch {}
@@ -148,9 +150,6 @@ function criarPonto(x, y, nome, r, g, b) {
   ggb.setFixed(nome, true, false);
 }
 
-// =========================
-// TABELA
-// =========================
 function atualizarTabela(a) {
   const esquerda = document.getElementById("tabelaEsquerda");
   const direita = document.getElementById("tabelaDireita");
@@ -176,9 +175,6 @@ function atualizarTabela(a) {
   });
 }
 
-// =========================
-// VERIFICAR LIMITE
-// =========================
 function verificarLimite(a) {
   const left = f(a - epsilon / 100);
   const right = f(a + epsilon / 100);
@@ -186,9 +182,6 @@ function verificarLimite(a) {
   return { esquerda: left, direita: right, existe, valor: existe ? (left + right) / 2 : null };
 }
 
-// =========================
-// ATUALIZAR TUDO
-// =========================
 function atualizarTudo() {
   if (!ggb) return;
   const raw = input.value.trim().toLowerCase();
@@ -219,9 +212,6 @@ btnMenos.onclick = () => {
   atualizarTudo();
 };
 
-// =========================
-// LIMITE
-// =========================
 btnLimite.onclick = () => {
   const a = parseFloat(input.value);
   if (!isFinite(a)) { alert("Valor inválido"); return; }
@@ -243,7 +233,6 @@ btnLimite.onclick = () => {
   aproxBox.setAttribute("open", true);
   
   let texto = `Limite lateral ESQUERDO:\n${format(lim.esquerda)}\n\nLimite lateral DIREITO:\n${format(lim.direita)}\n\n`;
-  
   const corretoEsq = Math.abs(esquerda - lim.esquerda) < 0.05;
   const corretoDir = Math.abs(direita - lim.direita) < 0.05;
   const corretoExiste = (lim.existe && existe === "sim") || (!lim.existe && existe === "não");
@@ -252,9 +241,6 @@ btnLimite.onclick = () => {
   alert(texto);
 };
 
-// =========================
-// CONTINUIDADE
-// =========================
 btnContinuidade.onclick = () => {
   const a = parseFloat(input.value);
   if (!isFinite(a)) { alert("Valor inválido"); return; }
@@ -305,9 +291,6 @@ btnContinuidade.onclick = () => {
   }
 };
 
-// =========================
-// CARREGAR ATIVIDADE
-// =========================
 document.getElementById("carregarAtividade").onclick = () => {
   if (!ggb) return;
   const nome = document.getElementById("atividadeSelect").value;
