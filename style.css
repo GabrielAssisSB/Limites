@@ -12,10 +12,6 @@ body {
   background: #111;
 
   font-family: Arial;
-
-  overscroll-behavior: none;
-
-  touch-action: manipulation;
 }
 
 /* =========================
@@ -23,15 +19,22 @@ body {
 ========================= */
 #ggb-element {
 
-  position: absolute;
+  position: fixed;
 
-  top: 0;
-  left: 0;
+  inset: 0;
 
   width: 100vw;
   height: 100vh;
 
-  pointer-events: auto;
+  z-index: 1;
+
+  background: #fff;
+}
+
+/* canvas interno */
+#ggb-element canvas {
+
+  touch-action: manipulation;
 }
 
 /* =========================
@@ -42,66 +45,68 @@ body {
 #continuidadeBox,
 #aproximacaoBox {
 
-  position: absolute;
+  position: fixed;
 
-  z-index: 99999;
+  z-index: 999999;
 
   background: rgba(20,20,20,0.92);
 
   color: white;
 
-  padding: 10px;
+  padding: 12px;
 
-  border-radius: 10px;
+  border-radius: 14px;
+
+  backdrop-filter: blur(6px);
+
+  box-shadow:
+    0 0 10px rgba(0,0,0,.4);
 
   user-select: none;
 
-  backdrop-filter: blur(4px);
-}
-
-#atividadeBox *,
-#limiteBox *,
-#continuidadeBox *,
-#aproximacaoBox * {
-
-  pointer-events: auto;
+  touch-action: none;
 }
 
 /* =========================
    POSIÇÕES
 ========================= */
-#atividadeBox {
-
-  bottom: 10px;
-  left: 10px;
-
-  display: flex;
-  gap: 5px;
-}
-
 #limiteBox {
 
   top: 10px;
   right: 10px;
 
+  width: 290px;
+
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: 10px;
 }
 
 #continuidadeBox {
 
-  top: 190px;
+  top: 200px;
   right: 10px;
+
+  width: 290px;
 }
 
 #aproximacaoBox {
 
-  top: 260px;
+  top: 290px;
   right: 10px;
 
-  width: 240px;
+  width: 290px;
+}
+
+#atividadeBox {
+
+  left: 10px;
+  bottom: 10px;
+
+  display: flex;
+
+  gap: 8px;
 }
 
 /* =========================
@@ -111,12 +116,37 @@ body {
 
   display: flex;
 
-  gap: 5px;
+  gap: 6px;
 }
 
 #controleX button {
 
-  width: 35px;
+  width: 45px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+button,
+input,
+select {
+
+  border: none;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  font-size: 16px;
+
+  background: #222;
+
+  color: white;
+}
+
+button {
+
+  cursor: pointer;
 }
 
 /* =========================
@@ -128,38 +158,12 @@ body {
 
   align-items: center;
 
-  gap: 8px;
-
-  font-size: 14px;
+  gap: 10px;
 }
 
 #epsilonSlider {
 
   width: 100%;
-}
-
-/* =========================
-   INPUTS
-========================= */
-button,
-input,
-select {
-
-  padding: 8px;
-
-  border: none;
-  border-radius: 6px;
-
-  background: #222;
-
-  color: white;
-
-  font-size: 16px;
-}
-
-button {
-
-  cursor: pointer;
 }
 
 /* =========================
@@ -169,7 +173,7 @@ summary {
 
   cursor: pointer;
 
-  margin-bottom: 10px;
+  font-size: 18px;
 
   font-weight: bold;
 }
@@ -183,21 +187,16 @@ table {
 
   border-collapse: collapse;
 
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 td {
 
   border: 1px solid #555;
 
-  padding: 4px;
+  padding: 6px;
 
   text-align: center;
-}
-
-h4 {
-
-  margin: 5px 0;
 }
 
 /* =========================
@@ -205,18 +204,17 @@ h4 {
 ========================= */
 @media (max-width: 700px) {
 
-  #atividadeBox,
   #limiteBox,
   #continuidadeBox,
   #aproximacaoBox {
 
-    transform: scale(0.92);
-
-    transform-origin: top left;
+    width: 250px;
   }
 
-  #aproximacaoBox {
+  button,
+  input,
+  select {
 
-    width: 180px;
+    font-size: 15px;
   }
 }
