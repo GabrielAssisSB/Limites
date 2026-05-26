@@ -165,17 +165,51 @@ function tornarArrastavel(el) {
   let offsetX = 0;
   let offsetY = 0;
 
+  // elementos que NÃO iniciam drag
+  const ignorar = [
+
+    "BUTTON",
+    "INPUT",
+    "SELECT",
+    "OPTION",
+    "TEXTAREA",
+    "SUMMARY",
+    "TABLE",
+    "TD",
+    "TR"
+  ];
+
   // =========================
   // MOUSE
   // =========================
   el.addEventListener(
     "mousedown",
-    iniciar
+    (e) => {
+
+      if (
+        ignorar.includes(
+          e.target.tagName
+        )
+      ) return;
+
+      iniciar(
+        e.clientX,
+        e.clientY
+      );
+    }
   );
 
   document.addEventListener(
     "mousemove",
-    mover
+    (e) => {
+
+      if (!ativo) return;
+
+      mover(
+        e.clientX,
+        e.clientY
+      );
+    }
   );
 
   document.addEventListener(
@@ -188,13 +222,48 @@ function tornarArrastavel(el) {
   // =========================
   el.addEventListener(
     "touchstart",
-    iniciarTouch,
+    (e) => {
+
+      if (
+        ignorar.includes(
+          e.target.tagName
+        )
+      ) {
+
+        return;
+      }
+
+      const touch =
+        e.touches[0];
+
+      iniciar(
+        touch.clientX,
+        touch.clientY
+      );
+
+      e.preventDefault();
+
+    },
     { passive: false }
   );
 
   document.addEventListener(
     "touchmove",
-    moverTouch,
+    (e) => {
+
+      if (!ativo) return;
+
+      const touch =
+        e.touches[0];
+
+      mover(
+        touch.clientX,
+        touch.clientY
+      );
+
+      e.preventDefault();
+
+    },
     { passive: false }
   );
 
@@ -204,9 +273,9 @@ function tornarArrastavel(el) {
   );
 
   // =========================
-  // START MOUSE
+  // START
   // =========================
-  function iniciar(e) {
+  function iniciar(x, y) {
 
     ativo = true;
 
@@ -214,77 +283,16 @@ function tornarArrastavel(el) {
       el.getBoundingClientRect();
 
     offsetX =
-      e.clientX - rect.left;
+      x - rect.left;
 
     offsetY =
-      e.clientY - rect.top;
+      y - rect.top;
   }
 
   // =========================
-  // MOVE MOUSE
+  // MOVE
   // =========================
-  function mover(e) {
-
-    if (!ativo) return;
-
-    atualizarPosicao(
-      e.clientX,
-      e.clientY
-    );
-  }
-
-  // =========================
-  // START TOUCH
-  // =========================
-  function iniciarTouch(e) {
-
-    e.preventDefault();
-
-    ativo = true;
-
-    const touch =
-      e.touches[0];
-
-    const rect =
-      el.getBoundingClientRect();
-
-    offsetX =
-      touch.clientX - rect.left;
-
-    offsetY =
-      touch.clientY - rect.top;
-  }
-
-  // =========================
-  // MOVE TOUCH
-  // =========================
-  function moverTouch(e) {
-
-    if (!ativo) return;
-
-    e.preventDefault();
-
-    const touch =
-      e.touches[0];
-
-    atualizarPosicao(
-      touch.clientX,
-      touch.clientY
-    );
-  }
-
-  // =========================
-  // END
-  // =========================
-  function finalizar() {
-
-    ativo = false;
-  }
-
-  // =========================
-  // POSIÇÃO
-  // =========================
-  function atualizarPosicao(x, y) {
+  function mover(x, y) {
 
     el.style.left =
       (x - offsetX) + "px";
@@ -297,6 +305,14 @@ function tornarArrastavel(el) {
 
     el.style.bottom =
       "auto";
+  }
+
+  // =========================
+  // END
+  // =========================
+  function finalizar() {
+
+    ativo = false;
   }
 }
 
