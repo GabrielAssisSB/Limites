@@ -9,32 +9,30 @@ html, body {
 }
 
 /* =========================
-   GEOGEBRA - PRIORIDADE TOTAL
+   GEOGEBRA - FUNDO (z-index baixo)
 ========================= */
 #ggb-element {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 1;
   background: #fff;
 }
 
-/* Garantir que o canvas do GeoGebra ocupe tudo */
-#ggb-element canvas,
-#ggb-element div,
-.ggb-container {
+/* Forçar o canvas do GeoGebra a aparecer */
+#ggb-element > * {
   width: 100% !important;
   height: 100% !important;
 }
 
 /* =========================
-   PAINÉIS - FLUTUANTES SOBRE O GEOGEBRA
+   PAINÉIS - FLUTUANTES (z-index alto)
 ========================= */
 .painel {
   position: fixed;
-  z-index: 999999;
+  z-index: 9999;
   background: rgba(20, 20, 20, 0.92);
   color: white;
   padding: 10px;
@@ -72,6 +70,7 @@ html, body {
   width: 240px;
 }
 
+/* Resto do CSS igual... */
 .painel-titulo {
   font-weight: bold;
   font-size: 14px;
@@ -170,9 +169,7 @@ th {
   background: #333;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 @media (max-width: 700px) {
   .painel {
     padding: 8px;
