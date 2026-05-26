@@ -41,7 +41,7 @@ html, body {
   font-size: 14px;
 }
 
-/* Posições e tamanhos reduzidos */
+/* PAINEL ATIVIDADES (canto inferior esquerdo) */
 #atividadeBox {
   left: 10px;
   bottom: 10px;
@@ -50,6 +50,7 @@ html, body {
   padding: 8px 10px;
 }
 
+/* PAINEL LIMITE (canto superior direito) */
 #limiteBox {
   top: 10px;
   right: 10px;
@@ -59,13 +60,7 @@ html, body {
   gap: 8px;
 }
 
-#continuidadeBox {
-  top: 10px;
-  right: 260px;
-  width: auto;
-  display: none; /* escondido pois o botão já está no limiteBox */
-}
-
+/* PAINEL APROXIMAÇÃO (abaixo do limite) */
 #aproximacaoBox {
   top: 230px;
   right: 10px;
@@ -89,6 +84,8 @@ html, body {
 #controleX button {
   width: 40px;
   padding: 8px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 /* Inputs e botões */
@@ -114,8 +111,16 @@ button:active {
   background: #1e3a5f;
 }
 
+.botao-primario:active {
+  background: #2a4a7a;
+}
+
 .botao-secundario {
   background: #3a2a1e;
+}
+
+.botao-secundario:active {
+  background: #4a3a2e;
 }
 
 /* Epsilon */
@@ -136,7 +141,7 @@ button:active {
   font-family: monospace;
 }
 
-/* Details */
+/* Details (Aproximações) */
 summary {
   cursor: pointer;
   font-size: 14px;
@@ -154,14 +159,15 @@ summary:hover {
 }
 
 .lado h4 {
-  font-size: 13px;
+  font-size: 12px;
   margin: 6px 0;
+  text-align: center;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 td, th {
@@ -175,7 +181,7 @@ th {
 }
 
 /* =========================
-   MOBILE - AINDA MAIS COMPACTO
+   MOBILE (TELAS MENORES QUE 700px)
 ========================= */
 @media (max-width: 700px) {
   .painel {
@@ -189,6 +195,18 @@ th {
   
   #limiteBox {
     gap: 6px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  #aproximacaoBox {
+    top: 210px;
+    right: 8px;
+  }
+  
+  #atividadeBox {
+    left: 8px;
+    bottom: 8px;
   }
   
   button, input, select {
@@ -198,6 +216,7 @@ th {
   
   #controleX button {
     width: 34px;
+    padding: 6px;
   }
   
   .painel-titulo {
@@ -213,11 +232,11 @@ th {
   }
   
   .lado h4 {
-    font-size: 11px;
+    font-size: 10px;
   }
   
   table {
-    font-size: 10px;
+    font-size: 9px;
   }
   
   td, th {
@@ -226,13 +245,13 @@ th {
   
   #atividadeBox select,
   #atividadeBox button {
-    padding: 6px;
+    padding: 5px 8px;
     font-size: 11px;
   }
 }
 
 /* =========================
-   TABLET
+   TABLET (701px - 1024px)
 ========================= */
 @media (min-width: 701px) and (max-width: 1024px) {
   #limiteBox,
@@ -240,7 +259,7 @@ th {
     width: 220px;
   }
   
-  #limiteBox {
-    gap: 7px;
+  #aproximacaoBox {
+    top: 215px;
   }
 }
