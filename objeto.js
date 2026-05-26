@@ -18,9 +18,17 @@ window.addEventListener("load", () => {
     showAlgebraInput: true,
     showMenuBar: false,
 
+    enableShiftDragZoom: true,
+
     appletOnLoad(api) {
 
       ggb = api;
+
+      setTimeout(() => {
+
+        atualizarTudo();
+
+      }, 1000);
     }
   };
 
@@ -148,104 +156,135 @@ function format(n) {
 }
 
 // =========================
-// DRAG
+// DRAG MOBILE + DESKTOP
 // =========================
 function tornarArrastavel(el) {
 
-  let dragging = false;
+  let ativo = false;
 
   let offsetX = 0;
   let offsetY = 0;
 
-  // DESKTOP
+  // =========================
+  // MOUSE
+  // =========================
   el.addEventListener(
     "mousedown",
-    (e) => {
-
-      dragging = true;
-
-      const rect =
-        el.getBoundingClientRect();
-
-      offsetX =
-        e.clientX - rect.left;
-
-      offsetY =
-        e.clientY - rect.top;
-    }
+    iniciar
   );
 
   document.addEventListener(
     "mousemove",
-    (e) => {
-
-      if (!dragging)
-        return;
-
-      mover(
-        e.clientX,
-        e.clientY
-      );
-    }
+    mover
   );
 
   document.addEventListener(
     "mouseup",
-    () => {
-
-      dragging = false;
-    }
+    finalizar
   );
 
-  // MOBILE
+  // =========================
+  // TOUCH
+  // =========================
   el.addEventListener(
     "touchstart",
-    (e) => {
-
-      dragging = true;
-
-      const touch =
-        e.touches[0];
-
-      const rect =
-        el.getBoundingClientRect();
-
-      offsetX =
-        touch.clientX - rect.left;
-
-      offsetY =
-        touch.clientY - rect.top;
-    },
-    { passive: true }
+    iniciarTouch,
+    { passive: false }
   );
 
   document.addEventListener(
     "touchmove",
-    (e) => {
-
-      if (!dragging)
-        return;
-
-      const touch =
-        e.touches[0];
-
-      mover(
-        touch.clientX,
-        touch.clientY
-      );
-    },
-    { passive: true }
+    moverTouch,
+    { passive: false }
   );
 
   document.addEventListener(
     "touchend",
-    () => {
-
-      dragging = false;
-    }
+    finalizar
   );
 
-  function mover(x, y) {
+  // =========================
+  // START MOUSE
+  // =========================
+  function iniciar(e) {
+
+    ativo = true;
+
+    const rect =
+      el.getBoundingClientRect();
+
+    offsetX =
+      e.clientX - rect.left;
+
+    offsetY =
+      e.clientY - rect.top;
+  }
+
+  // =========================
+  // MOVE MOUSE
+  // =========================
+  function mover(e) {
+
+    if (!ativo) return;
+
+    atualizarPosicao(
+      e.clientX,
+      e.clientY
+    );
+  }
+
+  // =========================
+  // START TOUCH
+  // =========================
+  function iniciarTouch(e) {
+
+    e.preventDefault();
+
+    ativo = true;
+
+    const touch =
+      e.touches[0];
+
+    const rect =
+      el.getBoundingClientRect();
+
+    offsetX =
+      touch.clientX - rect.left;
+
+    offsetY =
+      touch.clientY - rect.top;
+  }
+
+  // =========================
+  // MOVE TOUCH
+  // =========================
+  function moverTouch(e) {
+
+    if (!ativo) return;
+
+    e.preventDefault();
+
+    const touch =
+      e.touches[0];
+
+    atualizarPosicao(
+      touch.clientX,
+      touch.clientY
+    );
+  }
+
+  // =========================
+  // END
+  // =========================
+  function finalizar() {
+
+    ativo = false;
+  }
+
+  // =========================
+  // POSIÇÃO
+  // =========================
+  function atualizarPosicao(x, y) {
 
     el.style.left =
       (x - offsetX) + "px";
@@ -562,6 +601,8 @@ function verificarLimite(a) {
 // =========================
 function atualizarTudo() {
 
+  if (!ggb) return;
+
   const raw =
     input.value
     .trim()
@@ -666,48 +707,39 @@ btnLimite.onclick = () => {
   const lim =
     verificarLimite(a);
 
-  // esquerda
   let esquerda =
     prompt(
-
       "1° Qual o limite lateral ESQUERDO?"
     );
 
-  if (
-    esquerda === null
-  ) return;
+  if (esquerda === null)
+    return;
 
   esquerda =
     parseFloat(
       esquerda.replace(",", ".")
     );
 
-  // direita
   let direita =
     prompt(
-
       "2° Qual o limite lateral DIREITO?"
     );
 
-  if (
-    direita === null
-  ) return;
+  if (direita === null)
+    return;
 
   direita =
     parseFloat(
       direita.replace(",", ".")
     );
 
-  // existe
   let existe =
     prompt(
-
       "3° Existe limite?\n\nDigite:\nsim\nou\nnão"
     );
 
-  if (
-    existe === null
-  ) return;
+  if (existe === null)
+    return;
 
   existe =
     existe
@@ -722,7 +754,6 @@ btnLimite.onclick = () => {
   let texto = "";
 
   texto +=
-
     "Limite lateral ESQUERDO:\n" +
 
     format(
@@ -732,7 +763,6 @@ btnLimite.onclick = () => {
     "\n\n";
 
   texto +=
-
     "Limite lateral DIREITO:\n" +
 
     format(
@@ -811,12 +841,8 @@ btnContinuidade.onclick = () => {
   const imagem =
     f(a);
 
-  // =========================
-  // 1° IMAGEM
-  // =========================
   let respostaImagem =
     prompt(
-
       "1° Digite a imagem da função no ponto:"
     );
 
@@ -830,7 +856,6 @@ btnContinuidade.onclick = () => {
       .replace(",", ".")
     );
 
-  // não existe imagem
   if (
     !isFinite(imagem)
   ) {
@@ -845,7 +870,6 @@ btnContinuidade.onclick = () => {
     return;
   }
 
-  // imagem errada
   if (
     Math.abs(
       respostaImagem - imagem
@@ -864,12 +888,8 @@ btnContinuidade.onclick = () => {
     return;
   }
 
-  // =========================
-  // 2° LIMITE
-  // =========================
   let respostaLimite =
     prompt(
-
       "2° Digite o valor do limite:"
     );
 
@@ -883,7 +903,6 @@ btnContinuidade.onclick = () => {
       .replace(",", ".")
     );
 
-  // limite não existe
   if (
     !lim.existe
   ) {
@@ -898,7 +917,6 @@ btnContinuidade.onclick = () => {
     return;
   }
 
-  // limite errado
   if (
     Math.abs(
       respostaLimite - lim.valor
@@ -917,9 +935,6 @@ btnContinuidade.onclick = () => {
     return;
   }
 
-  // =========================
-  // 3° IGUAIS?
-  // =========================
   let iguais =
     prompt(
 
@@ -949,7 +964,6 @@ btnContinuidade.onclick = () => {
       imagem - lim.valor
     ) < 0.05;
 
-  // correto
   if (
     correto &&
     iguais === "sim"
@@ -963,7 +977,6 @@ btnContinuidade.onclick = () => {
     );
   }
 
-  // correto dizendo não
   else if (
     !correto &&
     iguais === "não"
@@ -977,11 +990,9 @@ btnContinuidade.onclick = () => {
     );
   }
 
-  // errado
   else {
 
     alert(
-
       "❌ Resposta incorreta."
     );
   }
@@ -1006,7 +1017,6 @@ document
     )
     .value;
 
-  // verifica atividades
   if (
     !window.ATIVIDADES ||
     !ATIVIDADES[nome]
@@ -1022,19 +1032,16 @@ document
   const atv =
     ATIVIDADES[nome];
 
-  // limpa geogebra
   try {
 
     ggb.reset();
 
   } catch {}
 
-  // carrega função
   ggb.evalCommand(
     atv.funcao
   );
 
-  // valor do limite
   input.value =
     atv.tende;
 
