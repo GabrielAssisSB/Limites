@@ -1,208 +1,220 @@
-html, body {
+html,
+body {
+
   margin: 0;
   padding: 0;
+
   width: 100%;
   height: 100%;
+
   overflow: hidden;
+
   background: #111;
-  font-family: Arial, sans-serif;
+
+  font-family: Arial;
 }
 
-/* GEOGEBRA - FUNDO */
+/* =========================
+   GEOGEBRA
+========================= */
 #ggb-element {
+
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
   z-index: 1;
+
   background: #fff;
 }
 
-/* PAINÉIS FLUTUANTES */
+/* canvas interno */
+#ggb-element canvas {
+
+  touch-action: manipulation;
+}
+
+/* =========================
+   PAINÉIS
+========================= */
 #atividadeBox,
 #limiteBox,
+#continuidadeBox,
 #aproximacaoBox {
+
   position: fixed;
-  z-index: 9999;
-  background: rgba(20, 20, 20, 0.92);
+
+  z-index: 999999;
+
+  background: rgba(20,20,20,0.92);
+
   color: white;
-  padding: 10px;
-  border-radius: 12px;
+
+  padding: 12px;
+
+  border-radius: 14px;
+
   backdrop-filter: blur(6px);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+
+  box-shadow:
+    0 0 10px rgba(0,0,0,.4);
+
   user-select: none;
+
   touch-action: none;
-  font-size: 14px;
 }
 
-/* POSIÇÕES */
+/* =========================
+   POSIÇÕES
+========================= */
 #limiteBox {
+
   top: 10px;
   right: 10px;
-  width: 240px;
+
+  width: 290px;
+
   display: flex;
   flex-direction: column;
-  gap: 8px;
+
+  gap: 10px;
+}
+
+#continuidadeBox {
+
+  top: 200px;
+  right: 10px;
+
+  width: 290px;
 }
 
 #aproximacaoBox {
-  top: 230px;
+
+  top: 290px;
   right: 10px;
-  width: 240px;
+
+  width: 290px;
 }
 
 #atividadeBox {
+
   left: 10px;
   bottom: 10px;
+
   display: flex;
-  gap: 6px;
-  padding: 8px 10px;
+
+  gap: 8px;
 }
 
-/* TÍTULO */
-.painel-titulo {
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 4px;
-  text-align: center;
-}
-
-/* CONTROLE X */
+/* =========================
+   CONTROLE X
+========================= */
 #controleX {
+
   display: flex;
-  gap: 5px;
+
+  gap: 6px;
 }
 
 #controleX button {
-  width: 38px;
-  padding: 6px;
-  font-size: 16px;
-  font-weight: bold;
+
+  width: 45px;
 }
 
-/* BOTÕES E INPUTS */
-button, input, select {
+/* =========================
+   INPUTS
+========================= */
+button,
+input,
+select {
+
   border: none;
-  border-radius: 8px;
-  padding: 6px 8px;
-  font-size: 13px;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  font-size: 16px;
+
   background: #222;
+
   color: white;
 }
 
 button {
+
   cursor: pointer;
 }
 
-button:active {
-  background: #333;
-}
-
-#btnLimite {
-  background: #1e3a5f;
-}
-
-#btnContinuidade {
-  background: #3a2a1e;
-}
-
-/* EPSILON */
+/* =========================
+   EPSILON
+========================= */
 #epsilonBox {
+
   display: flex;
+
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+
+  gap: 10px;
 }
 
 #epsilonSlider {
-  flex: 1;
-}
 
-#epsilonValor {
-  min-width: 45px;
-  text-align: right;
-  font-family: monospace;
-}
-
-/* DETAILS (APROXIMAÇÃO) */
-summary {
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  padding: 4px 0;
-}
-
-summary:hover {
-  color: #ffaa00;
-}
-
-.lado {
-  margin-top: 8px;
-}
-
-.lado h4 {
-  font-size: 11px;
-  margin: 6px 0;
-  text-align: center;
-}
-
-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 10px;
 }
 
-td, th {
+/* =========================
+   DETAILS
+========================= */
+summary {
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  font-weight: bold;
+}
+
+/* =========================
+   TABELAS
+========================= */
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  margin-top: 10px;
+}
+
+td {
+
   border: 1px solid #555;
-  padding: 4px;
+
+  padding: 6px;
+
   text-align: center;
 }
 
-th {
-  background: #333;
-}
-
-/* MOBILE - PAINÉIS AINDA MENORES */
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 700px) {
+
   #limiteBox,
+  #continuidadeBox,
   #aproximacaoBox {
-    width: 200px;
+
+    width: 250px;
   }
-  
-  #aproximacaoBox {
-    top: 210px;
-  }
-  
-  #limiteBox {
-    gap: 6px;
-    top: 8px;
-    right: 8px;
-  }
-  
-  #atividadeBox {
-    left: 8px;
-    bottom: 8px;
-  }
-  
-  button, input, select {
-    padding: 5px 6px;
-    font-size: 11px;
-  }
-  
-  #controleX button {
-    width: 32px;
-  }
-  
-  .painel-titulo {
-    font-size: 11px;
-  }
-  
-  table {
-    font-size: 9px;
-  }
-  
-  td, th {
-    padding: 3px;
+
+  button,
+  input,
+  select {
+
+    font-size: 15px;
   }
 }
