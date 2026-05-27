@@ -39,7 +39,7 @@ html, body {
   touch-action: none;
 }
 
-/* POSIÇÕES */
+/* POSIÇÕES DESKTOP */
 #limiteBox {
   top: 10px;
   right: 10px;
@@ -106,7 +106,6 @@ summary {
   font-weight: bold;
 }
 
-/* TABELAS - COM TÍTULOS VISÍVEIS */
 .lado {
   margin-top: 10px;
 }
@@ -131,21 +130,128 @@ td {
   text-align: center;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE - BOTÕES REDUZIDOS
+========================= */
 @media (max-width: 700px) {
+  /* Painéis mais estreitos */
   #limiteBox,
   #continuidadeBox,
   #aproximacaoBox {
-    width: 250px;
+    width: 220px;
   }
+  
+  /* Botões e inputs menores */
   button, input, select {
-    font-size: 15px;
+    padding: 6px 8px;
+    font-size: 11px;
   }
-  .lado h4 {
+  
+  /* Botões de + e - */
+  #controleX button {
+    width: 28px;
+    padding: 5px;
     font-size: 12px;
   }
-  td {
+  
+  /* Input do x tende a */
+  #controleX input {
     padding: 5px;
     font-size: 11px;
+  }
+  
+  /* Botão de limite e continuidade */
+  #btnLimite, #btnContinuidade {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  
+  /* Epsilon */
+  #epsilonBox {
+    gap: 6px;
+    font-size: 10px;
+  }
+  
+  #epsilonSlider {
+    height: 4px;
+  }
+  
+  #epsilonValor {
+    font-size: 10px;
+    min-width: 35px;
+  }
+  
+  /* Atividades */
+  #atividadeBox {
+    gap: 5px;
+    padding: 8px;
+  }
+  
+  #atividadeBox select {
+    padding: 5px 6px;
+    font-size: 10px;
+    max-width: 110px;
+  }
+  
+  #atividadeBox button {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  
+  /* Aproximação */
+  summary {
+    font-size: 12px;
+    padding: 4px 0;
+  }
+  
+  .lado h4 {
+    font-size: 10px;
+    margin: 0 0 4px 0;
+  }
+  
+  table {
+    font-size: 9px;
+  }
+  
+  td {
+    padding: 3px;
+    font-size: 9px;
+  }
+}
+
+/* =========================
+   TELAS MUITO PEQUENAS (menos de 480px)
+========================= */
+@media (max-width: 480px) {
+  #limiteBox,
+  #continuidadeBox,
+  #aproximacaoBox {
+    width: 190px;
+    padding: 8px;
+  }
+  
+  button, input, select {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+  
+  #controleX button {
+    width: 24px;
+    padding: 4px;
+    font-size: 10px;
+  }
+  
+  #btnLimite, #btnContinuidade {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+  
+  .lado h4 {
+    font-size: 9px;
+  }
+  
+  td {
+    padding: 2px;
+    font-size: 8px;
   }
 }
