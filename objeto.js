@@ -12,7 +12,7 @@ window.addEventListener("load", () => {
     width: window.innerWidth,
     height: window.innerHeight,
 
-    showToolBar: true,
+    showToolBar: false,
     showZoomButtons: false,
 
     showAlgebraInput: true,
